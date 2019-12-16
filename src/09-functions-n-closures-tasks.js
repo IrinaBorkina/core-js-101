@@ -25,9 +25,11 @@
  *
  */
 function getComposition(f, g) {
-  return function (x) {
+  function func(x) {
     return f(g(x));
-  };
+  }
+
+  return func;
 }
 
 
@@ -168,9 +170,10 @@ function logger(/* func, logFunc */) {
  */
 function partialUsingArguments() {
   const args = Array.from(arguments).slice(1);
-  return function () {
+  function func() {
     return args.concat(Array.from(arguments)).join('');
-  };
+  }
+  return func;
 }
 
 
