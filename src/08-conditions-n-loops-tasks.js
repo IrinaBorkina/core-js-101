@@ -128,8 +128,11 @@ function isTriangle(a, b, c) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
+function doRectanglesOverlap(rect1, rect2) {
+  return ((rect1.top + rect1.height) > rect2.top && rect1.top <= rect2.top
+    && (rect1.left + rect1.width) > rect2.left && rect1.left <= rect2.left)
+    || ((rect2.top + rect2.height) > rect1.top && rect2.top <= rect1.top
+    && (rect2.left + rect2.width) > rect1.left && rect2.left <= rect1.left);
 }
 
 
@@ -159,8 +162,9 @@ function doRectanglesOverlap(/* rect1, rect2 */) {
  *   { center: { x:0, y:0 }, radius:10 },  { x:10, y:10 }   => false
  *
  */
-function isInsideCircle(/* circle, point */) {
-  throw new Error('Not implemented');
+function isInsideCircle(circle, point) {
+  return ((circle.center.x - point.x) ** 2 + (circle.center.y - point.y) ** 2)
+   < (circle.radius) ** 2;
 }
 
 
@@ -437,8 +441,21 @@ function getCommonDirectoryPath(pathes) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const m1Rows = m1.length;
+  const m1Cols = m1[0].length;
+  const m2Cols = m2[0].length;
+  const m = new Array(m1Rows); // initialize array of rows
+  for (let i = 0; i < m1Rows; i += 1) {
+    m[i] = new Array(m2Cols); // initialize the current row
+    for (let j = 0; j < m2Cols; j += 1) {
+      m[i][j] = 0; // initialize the current cell
+      for (let k = 0; k < m1Cols; k += 1) {
+        m[i][j] += m1[i][k] * m2[k][j];
+      }
+    }
+  }
+  return m;
 }
 
 
@@ -482,8 +499,8 @@ function evaluateTicTacToePosition(position) {
       || (position[0][0] === 'X' && position[1][1] === 'X' && position[2][2] === 'X')
       || (position[0][2] === 'X' && position[1][1] === 'X' && position[2][0] === 'X')) {
     return 'X';
-  } if
-  ((position[0][0] === '0' && position[0][1] === '0' && position[0][2] === '0')
+  }
+  if ((position[0][0] === '0' && position[0][1] === '0' && position[0][2] === '0')
       || (position[1][0] === '0' && position[1][1] === '0' && position[1][2] === '0')
       || (position[2][0] === '0' && position[2][1] === '0' && position[2][2] === '0')
       || (position[0][0] === '0' && position[1][0] === '0' && position[2][0] === '0')
