@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* ************************************************************************************************
  *                                                                                                *
  * Plese read the following tutorial before implementing tasks:                                   *
@@ -120,32 +121,77 @@ function fromJSON(proto, json) {
  */
 
 const cssSelectorBuilder = {
-  element(/* value */) {
-    throw new Error('Not implemented');
+  str: '',
+
+  check(index) {
+    if ((index === 1 || index === 2 || index === 6) && this.index === index) throw new Error('Element, id and pseudo-element should not occur more then one time inside the selector');
+    if (this.index > index) throw new Error('Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element');
   },
 
-  id(/* value */) {
-    throw new Error('Not implemented');
+  element(value) {
+    this.check(1);
+    const obj = {};
+    Object.assign(obj, this);
+    obj.str = `${obj.str}${value}`;
+    obj.index = 1;
+    return obj;
   },
 
-  class(/* value */) {
-    throw new Error('Not implemented');
+
+  id(value) {
+    this.check(2);
+    const obj = {};
+    Object.assign(obj, this);
+    obj.str = `${obj.str}#${value}`;
+    obj.index = 2;
+    return obj;
   },
 
-  attr(/* value */) {
-    throw new Error('Not implemented');
+  class(value) {
+    this.check(3);
+    const obj = {};
+    Object.assign(obj, this);
+    obj.str = `${obj.str}.${value}`;
+    obj.index = 3;
+    return obj;
   },
 
-  pseudoClass(/* value */) {
-    throw new Error('Not implemented');
+  attr(value) {
+    this.check(4);
+    const obj = {};
+    Object.assign(obj, this);
+    obj.str = `${obj.str}[${value}]`;
+    obj.index = 4;
+    return obj;
   },
 
-  pseudoElement(/* value */) {
-    throw new Error('Not implemented');
+  pseudoClass(value) {
+    this.check(5);
+    const obj = {};
+    Object.assign(obj, this);
+    obj.str = `${obj.str}:${value}`;
+    obj.index = 5;
+    return obj;
   },
 
-  combine(/* selector1, combinator, selector2 */) {
-    throw new Error('Not implemented');
+  pseudoElement(value) {
+    this.check(6);
+    const obj = {};
+    Object.assign(obj, this);
+    obj.str = `${obj.str}::${value}`;
+    obj.index = 6;
+    return obj;
+  },
+
+  combine(selector1, combinator, selector2) {
+    const obj = {};
+    Object.assign(obj, this);
+    obj.str = `${obj.str}${selector1.stringify()} ${combinator} ${selector2.stringify()}`;
+    return obj;
+  },
+
+  stringify() {
+    return this.str;
   },
 };
 
